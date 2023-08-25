@@ -1,4 +1,9 @@
 /* Styling the navigation bar background and font color */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
 .navbar {
     background-color: #f8f9fa; /* Change this to your preferred background color */
   }
@@ -69,11 +74,4 @@
     width: 100%;
     height: auto;
   }
-  
-.additional-text {
-    margin-top: 20px; /* Add space between the centered text and additional text */
-    padding: 20px;
-    background-color: #f0f0f0;
-    text-align: center;
-  }
-  
+
