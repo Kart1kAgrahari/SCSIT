@@ -19,44 +19,76 @@
 .contact-link{
   margin-right: 300px;
 }
+.navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000; /* Adjust the z-index to make sure the navbar is above other content */
+    }
 .navbar-brand {
     margin-right: 500px;
 }
-.collapse-button {
-  position: relative;
-  display: inline-block;
+.search-container {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+    }
+
+.search-input {
+    padding: 5px;
+    font-size: 16px;
+    flex: 1;
+    }
+
+.search-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
-.collapse-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 24px;
-  color: #e82020;
+.highlight {
+    background-color: yellow;
 }
+#toast {
+    display: none;
+    max-width: 400px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 10px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    }
 
-.collapse-content {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-}
+.show-toast {
+    display: block;
+        }
+.collapse-bar {
+    display: flex;
+    align-items: center;
+    background-color: #ecb510;
+    padding: 10px; /* Add padding here */
+    margin: 10px;
+    cursor: pointer;
+    }
 
-.collapse-content ul {
-  list-style: none;
-  margin: 0;
-  padding: 10px;
-}
+.collapse-bar i {
+    margin-left: auto;
+    font-size: 18px;
+    }
 
-.collapse-content li {
-  padding: 5px 0;
-}
-
-
+.collapse-menu {
+    display: none;
+    padding-left: 20px; /* Add padding for sub-menu */
+    }
+   
+        
 </style>
 
 <script src="collapse.js"></script>
@@ -106,39 +138,164 @@
 </div>
 <div>
     <marquee><b>WELCOME TO COMPUTER SCIENCE AND INFORMATION TECHNOLOGY</b></marquee>
-</div><br><br>
-
-
-
-
-<div class="collapse-button">
-    <p>Computer Science</p>
-    <button class="collapse-btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent">
-        <i class="fa fa-plus"></i>
-    </button>
-    <div class="collapse-content collapse" id="collapseContent">
-        <ul>
-            <li>periperi</li>
-            <li>farmhouse</li>
-        </ul>
-    </div>
 </div>
 
+
+<!-- //search bar|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+
+<div class="search-container">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search...">
+    <button class="search-button" id="searchButton">Search</button>
+</div>
+
+<div id="content">
+        <!-- Your content here -->
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+        <p>hello my name is kart</p>
+        
+
+        <!-- ||||||||||||COMPUTER SCIENCE DIV TAG||||||||||||||||||||||||||||| -->
+        <div class="collapse-bar" id="collapseBar">
+            <span>COMPUTER SCIENCE</span>
+            <i class="fa fa-plus" id="plusIcon"></i>
+        </div>
+        <div class="collapse-menu" id="collapseMenu">
+            <ul>
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+            
+            </ul>
+        </div>
+    </div>
+
+    <!-- |||||||||||||||||||||||||||||||||||||IT DIV TAG||||||||||||||||||||||||||||||||||||| -->
+
+    <div class="collapse-bar" id="collapseBar2">
+        <span>INFORMATION TECHNOLOGY</span>
+        <i class="fa fa-plus" id="plusIcon2"></i>
+    </div>
+    <div class="collapse-menu" id="collapseMenu2">
+        <ul>
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+    <!-- ||||||||||||END|||||||||| -->
+
+    <div id="toast">Search term must be at least 3 characters.</div>
+
+    <script>
+        document.getElementById("searchInput").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                document.getElementById("searchButton").click();
+            }
+        });
+
+        document.getElementById("searchButton").addEventListener("click", function () {
+            var searchTerm = document.getElementById("searchInput").value;
+            var toast = document.getElementById("toast");
+            var contentDiv = document.getElementById("content");
+
+            // Remove the 'highlight' class from previous search
+            var highlightedSpans = contentDiv.querySelectorAll(".highlight");
+            highlightedSpans.forEach(function (span) {
+                span.classList.remove("highlight");
+            });
+
+            if (searchTerm.trim().length >= 3) {
+                var regex = new RegExp(searchTerm, 'gi');
+                var content = contentDiv.innerHTML;
+
+                var matches = content.match(regex);
+                if (matches) {
+                    contentDiv.innerHTML = content.replace(regex, function (match) {
+                        return '<span class="highlight">' + match + '</span>';
+                    });
+
+                    toast.style.display = "none";
+                } else {
+                    toast.innerText = "Target Not Found";
+                    toast.style.display = "block";
+                    setTimeout(function () {
+                        toast.style.display = "none";
+                    }, 3000); // Hide the toast after 5 seconds
+                }
+            } else {
+                toast.innerText = "Search term must be at least 3 characters.";
+                toast.style.display = "block";
+                setTimeout(function () {
+                    toast.style.display = "none";
+                }, 3000); // Hide the toast after 5 seconds
+            }
+        });
+    </script>
+
+    <!-- ||||||||||||||||||||||||||||||||||||||||||||DROP MENU||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+    <!-- iska div tag search bar tag ke andr hai -->
+    <script>
+        var plusIcon = document.getElementById("plusIcon");
+        var collapseMenu = document.getElementById("collapseMenu");
+
+        plusIcon.addEventListener("click", function () {
+            if (collapseMenu.style.display === "none" || collapseMenu.style.display === "") {
+                collapseMenu.style.display = "block";
+
+                // Scroll down to make the menu visible
+                var collapseMenuRect = collapseMenu.getBoundingClientRect();
+                if (collapseMenuRect.bottom > window.innerHeight) {
+                    window.scrollBy(0, collapseMenuRect.bottom - window.innerHeight);
+                }
+            } else {
+                collapseMenu.style.display = "none";
+            }
+        });
+
+        // Hide menu when clicking anywhere else on the document
+        document.addEventListener("click", function (event) {
+            if (!collapseBar.contains(event.target)) {
+                collapseMenu.style.display = "none";
+            }
+        });
+    </script>
+
+    <!-- ||||||||||||||||||||||||||||||||||||||||INFORMATION TECHNOLOGY MENU|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+    <script>
+        var plusIcon2 = document.getElementById("plusIcon2");
+        var collapseMenu2 = document.getElementById("collapseMenu2");
+    
+        plusIcon2.addEventListener("click", function () {
+            if (collapseMenu2.style.display === "none" || collapseMenu2.style.display === "") {
+                collapseMenu2.style.display = "block";
+                // Scroll logic here if needed
+            } else {
+                collapseMenu2.style.display = "none";
+            }
+        });
+    
+        // Hide menu when clicking anywhere else on the document
+        document.addEventListener("click", function (event) {
+            if (!collapseBar2.contains(event.target)) {
+                collapseMenu2.style.display = "none";
+            }
+        });
+    </script>
+    
+
+    
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const collapseButton = document.querySelector(".collapse-button .collapse-btn");
-        const collapseContent = document.querySelector(".collapse-button .collapse-content");
 
-        collapseButton.addEventListener("click", function () {
-            collapseContent.classList.toggle("show");
-        });
-    });
-</script>
 
 </body>
 </html>
