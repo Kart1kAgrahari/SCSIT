@@ -21,6 +21,7 @@
 }
 .navbar {
         position: fixed;
+        background: linear-gradient(to right, #3498db, #ffdb58); 
         top: 0;
         width: 100%;
         z-index: 1000; /* Adjust the z-index to make sure the navbar is above other content */
@@ -28,6 +29,15 @@
 .navbar-brand {
     margin-right: 500px;
 }
+
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: black; /* Text Color for Nav Links */
+        }
+
+        .navbar-toggler-icon {
+            background-color: black; /* Toggler Icon Color */
+        }
 .search-container {
     display: flex;
     align-items: center;
@@ -87,23 +97,33 @@
     display: none;
     padding-left: 20px; /* Add padding for sub-menu */
     }
-    .about-column {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            background-color: #f5f5f5;
-        }
-        .banner {
-            overflow: hidden;
-            position: relative;
+.about-bar {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    height: 130px;
+    background-color: #000c76ef;
+}
+.about-image {
+    width: 100px; /* Set the width of the image */
+    height: 100px; /* Set the height of the image */
+    margin-right: 100px;
+}
+.about-content {
+    flex: 1;
+    color: white;
+    }
+        
+.banner {
+    overflow: hidden;
+    position: relative;
            
-        }
+    }
 
-        .banner img {
-            width: 100%;
-            height: 100%;
-        } 
+.banner img {
+    width: 100%;
+    height: 100%;
+    } 
    
         
 </style>
@@ -162,7 +182,7 @@
 
     image.addEventListener('mouseover', () => {
         image.style.transform = 'scale(1.1)';
-        image.style.transition = 'transform 2.0s ease-in-out';
+        image.style.transition = 'transform 1.0s ease-in-out';
     });
 
     image.addEventListener('mouseout', () => {
@@ -219,57 +239,69 @@
     </div>
 
 
+    <div class="about-bar">
+        <img class="about-image" src="footerlogo.svg" alt="About Us Image">
+        <div class="about-content">
+            <br>
+            Noida Institute of Engineering Technology 19, Knowledge Park- II, Institutional Area,<br>
+                Greater Noida (UP) - 201306<br>
+    <a class="Email" aria-label="Email" href="mailto:example@example.com" target="_blank"> <i class="fa fa-envelope" style="color: rgb(255, 255, 255);"></i>&nbsp;&nbsp;&nbsp; admission@niet.co.in</a><br>
+     <i class="fa fa-phone"></i>&nbsp;&nbsp; +91 - 844-838-4611
+        </div>
+    </div>
+
+
+
 </div>
     <!-- ||||||||||||END|||||||||| -->
 
     <div id="toast">Search term must be at least 3 characters.</div>
 
     <script>
-        document.getElementById("searchInput").addEventListener("keyup", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                document.getElementById("searchButton").click();
-            }
-        });
-
         document.getElementById("searchButton").addEventListener("click", function () {
-            var searchTerm = document.getElementById("searchInput").value;
-            var toast = document.getElementById("toast");
-            var contentDiv = document.getElementById("content");
-
-            // Remove the 'highlight' class from previous search
-            var highlightedSpans = contentDiv.querySelectorAll(".highlight");
-            highlightedSpans.forEach(function (span) {
-                span.classList.remove("highlight");
-            });
-
-            if (searchTerm.trim().length >= 3) {
-                var regex = new RegExp(searchTerm, 'gi');
-                var content = contentDiv.innerHTML;
-
-                var matches = content.match(regex);
-                if (matches) {
-                    contentDiv.innerHTML = content.replace(regex, function (match) {
-                        return '<span class="highlight">' + match + '</span>';
-                    });
-
-                    toast.style.display = "none";
-                } else {
-                    toast.innerText = "Target Not Found";
-                    toast.style.display = "block";
-                    setTimeout(function () {
-                        toast.style.display = "none";
-                    }, 3000); // Hide the toast after 5 seconds
-                }
-            } else {
-                toast.innerText = "Search term must be at least 3 characters.";
-                toast.style.display = "block";
-                setTimeout(function () {
-                    toast.style.display = "none";
-                }, 3000); // Hide the toast after 5 seconds
+            performSearch();
+        });
+    
+        document.getElementById("searchInput").addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                performSearch();
             }
         });
+    
+        function performSearch() {
+            var searchTerm = document.getElementById("searchInput").value.toLowerCase();
+            var contentDiv = document.getElementById("content");
+            var contentText = contentDiv.innerText.toLowerCase();
+    
+            var searchResults = [];
+            var startIndex = 0;
+    
+            while (startIndex !== -1) {
+                startIndex = contentText.indexOf(searchTerm, startIndex);
+                if (startIndex !== -1) {
+                    searchResults.push(startIndex);
+                    startIndex += searchTerm.length;
+                }
+            }
+    
+            highlightSearchResults(searchResults);
+        }
+    
+        function highlightSearchResults(results) {
+            var contentDiv = document.getElementById("content");
+            var contentText = contentDiv.innerText;
+    
+            contentText = contentText.replace(/<span class="highlight">|<\/span>/g, ''); // Remove previous highlights
+    
+            results.forEach(function (startIndex) {
+                var highlightedTerm = '<span class="highlight">' + contentText.substr(startIndex, searchTerm.length) + '</span>';
+                contentText = contentText.substr(0, startIndex) + highlightedTerm + contentText.substr(startIndex + searchTerm.length);
+            });
+    
+            contentDiv.innerHTML = contentText;
+        }
     </script>
+    
 
     <!-- ||||||||||||||||||||||||||||||||||||||||||||DROP MENU||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
     <!-- iska div tag search bar tag ke andr hai -->
@@ -308,15 +340,8 @@
         
     </script>
 
+<!-- ||||||||||||||||||||||||||||||||||||||About us column, lst wala|||||||||||||||||||||||||||||||||||||||| -->
 
-<div class="about-column">
-    <div>
-        <h3>About Us</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.</p>
-        <a href="#" class="btn btn-primary">Learn More</a>
-    </div>
-</div>
-    
 
     
 
