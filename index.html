@@ -27,7 +27,7 @@
         z-index: 1000; /* Adjust the z-index to make sure the navbar is above other content */
     }
 .navbar-brand {
-    margin-right: 500px;
+    margin-right: 400px;
 }
 
 
@@ -123,6 +123,7 @@
 .banner img {
     width: 100%;
     height: 100%;
+    margin: 10px;
     } 
    
 
@@ -144,13 +145,19 @@
     #photo-section .photo-text {
         opacity: 0;
         transform: translateY(20px);
-        transition: opacity 2s ease-in-out, transform 1s ease-in-out;
+        transition: opacity 4s ease-in-out, transform 4s ease-in-out;
     }
 
     #photo-section .photo-text.show {
         opacity: 1;
-        transform: translateY(0) translateX(0);
+        transform: translateY(0);
     }
+    .nav-image {
+    width: 50px; /* Set the width of the image */
+    height: 100%; /* Set the height of the image */
+    margin: 0px;
+    padding: 0px;
+}
 </style>
 
 <script src="collapse.js"></script>
@@ -159,6 +166,7 @@
   <header>  
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
+            <img class="nav-image" src="nav.jpeg" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <a class="navbar-brand" href="#">SCSIT</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -202,6 +210,8 @@
     <img id="zoomImage" src="banner.png" alt="Banner Image">
 </div>
 
+
+
 <script>
     const image = document.getElementById('zoomImage');
 
@@ -240,15 +250,13 @@
     </div>
 </section>
 <script>
-    // Function to add the "show" class to the photo text for animation
-    function showPhotoTextAnimation() {
-        var photoText = document.querySelector('#photo-section .photo-text');
-        photoText.classList.add('show');
-    }
-
-    // Add an event listener to trigger the animation when the page loads
-    window.addEventListener('load', showPhotoTextAnimation);
+    document.addEventListener("DOMContentLoaded", function () {
+        const photoText = document.querySelector("#photo-section .photo-text");
+        photoText.classList.add("show");
+    });
 </script>
+
+
 
 
 <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||search bar|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
