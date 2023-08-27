@@ -125,7 +125,32 @@
     height: 100%;
     } 
    
-        
+
+    #photo-section {
+        padding: 40px 0;
+        background-color: #f9f9f9;
+    }
+
+    #photo-section .photo-text {
+        display: flex;
+        align-items: center;
+    }
+
+    #photo-section img {
+        margin-right: 20px;
+        max-width: 100%;
+        height: 200px;
+    }
+    #photo-section .photo-text {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 2s ease-in-out, transform 1s ease-in-out;
+    }
+
+    #photo-section .photo-text.show {
+        opacity: 1;
+        transform: translateY(0) translateX(0);
+    }
 </style>
 
 <script src="collapse.js"></script>
@@ -191,6 +216,41 @@
 </script>
 
 
+<!-- |||||||||||||||||||||||||||||||||||||||HOD |||||||||||||||||||||||||||||||||||||||||\ -->
+<section id="photo-section">
+    <div class="container">
+        <div class="photo-text">
+            <img src="pfp2.jpg" alt="Your Photo">
+            <div>
+                <h2>Dr. Kumud Saxena (HOD SCSIT)</h2>
+                <p>   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non commodo augue.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    // Function to add the "show" class to the photo text for animation
+    function showPhotoTextAnimation() {
+        var photoText = document.querySelector('#photo-section .photo-text');
+        photoText.classList.add('show');
+    }
+
+    // Add an event listener to trigger the animation when the page loads
+    window.addEventListener('load', showPhotoTextAnimation);
+</script>
+
+
 <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||search bar|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
 
 <div class="search-container">
@@ -216,9 +276,9 @@
         </div>
         <div class="collapse-menu" id="collapseMenu">
             <ul>
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
+                <li><a href="portfolio.html" style="text-decoration: none; color: inherit;">Kartik Kumar Agrahari</a></li>
+                <li>Hritik Srivastava</li>
+                <li>Kush Sharma</li>
             
             </ul>
         </div>
@@ -232,9 +292,9 @@
     </div>
     <div class="collapse-menu" id="collapseMenu2">
         <ul>
-            <li>Item 1</li>
-            <li>Item 2</li>
-            <li>Item 3</li>
+            <li>Bhumika Rustagi</li>
+            <li>Anamika Singh</li>
+            <li>Kumud Saxena</li>
         </ul>
     </div>
 
@@ -247,49 +307,52 @@
 
     <div id="toast">Search term must be at least 3 characters.</div>
 
+    
     <script>
-        document.getElementById("searchButton").addEventListener("click", function () {
-            performSearch();
-        });
-    
-        document.getElementById("searchInput").addEventListener("keydown", function (event) {
+        document.getElementById("searchInput").addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
-                performSearch();
+                event.preventDefault();
+                document.getElementById("searchButton").click();
             }
         });
-    
-        function performSearch() {
-            var searchTerm = document.getElementById("searchInput").value.toLowerCase();
+
+        document.getElementById("searchButton").addEventListener("click", function () {
+            var searchTerm = document.getElementById("searchInput").value;
+            var toast = document.getElementById("toast");
             var contentDiv = document.getElementById("content");
-            var contentText = contentDiv.innerText.toLowerCase();
-    
-            var searchResults = [];
-            var startIndex = 0;
-    
-            while (startIndex !== -1) {
-                startIndex = contentText.indexOf(searchTerm, startIndex);
-                if (startIndex !== -1) {
-                    searchResults.push(startIndex);
-                    startIndex += searchTerm.length;
-                }
-            }
-    
-            highlightSearchResults(searchResults);
-        }
-    
-        function highlightSearchResults(results) {
-            var contentDiv = document.getElementById("content");
-            var contentText = contentDiv.innerText;
-    
-            contentText = contentText.replace(/<span class="highlight">|<\/span>/g, ''); // Remove previous highlights
-    
-            results.forEach(function (startIndex) {
-                var highlightedTerm = '<span class="highlight">' + contentText.substr(startIndex, searchTerm.length) + '</span>';
-                contentText = contentText.substr(0, startIndex) + highlightedTerm + contentText.substr(startIndex + searchTerm.length);
+
+            // Remove the 'highlight' class from previous search
+            var highlightedSpans = contentDiv.querySelectorAll(".highlight");
+            highlightedSpans.forEach(function (span) {
+                span.classList.remove("highlight");
             });
-    
-            contentDiv.innerHTML = contentText;
-        }
+
+            if (searchTerm.trim().length >= 3) {
+                var regex = new RegExp(searchTerm, 'gi');
+                var content = contentDiv.innerHTML;
+
+                var matches = content.match(regex);
+                if (matches) {
+                    contentDiv.innerHTML = content.replace(regex, function (match) {
+                        return '<span class="highlight">' + match + '</span>';
+                    });
+
+                    toast.style.display = "none";
+                } else {
+                    toast.innerText = "Target Not Found";
+                    toast.style.display = "block";
+                    setTimeout(function () {
+                        toast.style.display = "none";
+                    }, 3000); // Hide the toast after 5 seconds
+                }
+            } else {
+                toast.innerText = "Search term must be at least 3 characters.";
+                toast.style.display = "block";
+                setTimeout(function () {
+                    toast.style.display = "none";
+                }, 3000); // Hide the toast after 5 seconds
+            }
+        });
     </script>
     
 
