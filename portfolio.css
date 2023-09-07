@@ -358,6 +358,17 @@ header .navbar ul li a:hover {
   flex-wrap: wrap;
   padding: 4rem;
 }
+.img-with-text {
+  text-align: center;
+  width: [width of img];
+  font-size: 10px;
+  
+}
+
+.img-with-text img {
+  display: block;
+  margin: 0 auto;
+}
 .about .row .image {
   text-align: center;
   flex: 1 1 35rem;
